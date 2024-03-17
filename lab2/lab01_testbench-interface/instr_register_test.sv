@@ -98,8 +98,32 @@ module instr_register_test
     $display("  result_t =  %0d\n", instruction_word.rezultat);
   endfunction: print_results
 
-  function void check_results;
-  //if else
+    function void check_results;
+  int expected_result;
+
+  case (instruction_word.opc)
+    ZERO : expected_result = 0;
+    ADD: expected_result = instruction_word.op_a + instruction_word.op_b;
+    SUB: expected_result = instruction_word.op_a - instruction_word.op_b;
+    PASSA: expected_result = instruction_word.op_a;
+    PASSB: expected_result = instruction_word.op_b;
+    MULT: expected_result = instruction_word.op_a * instruction_word.op_b;
+    DIV:
+         if(!instruction_word.op_b)
+              expected_result = 0;
+         else
+              expected_result = instruction_word.op_a / instruction_word.op_b;
+    MOD: expected_result = instruction_word.op_a % instruction_word.op_b;
+    default: $display("operator doesnt exist");
+  endcase
+
+  if (expected_result == instruction_word.rezultat) begin
+    $display(" Approved");
+  end else begin
+    $display("Unapproved");
+  end
+ 
+  
   endfunction: check_results
 
 

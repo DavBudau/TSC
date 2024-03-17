@@ -36,12 +36,14 @@ import instr_register_pkg::*;  // user-defined types are defined in instr_regist
         ADD: iw_reg[write_pointer] = '{opcode,operand_a,operand_b, operand_a + operand_b};
         SUB: iw_reg[write_pointer] = '{opcode,operand_a,operand_b, operand_a - operand_b};
         MULT: iw_reg[write_pointer] = '{opcode,operand_a,operand_b, operand_a * operand_b};
-        DIV: if(operand_b == 0)
-              
-        MOD: iw_reg[write_pointer] = '{opcode,operand_a,operand_b, operand_a % operand_b};  
-
-      endcase 
-    end
+        DIV:
+					if(!operand_b )
+						iw_reg[write_pointer] ='{opcode,operand_a,operand_b, 0};
+					else
+						iw_reg[write_pointer] = '{opcode,operand_a,operand_b, operand_a / operand_b};
+				MOD: iw_reg[write_pointer] = '{opcode,operand_a,operand_b, operand_a % operand_b};  
+		  endcase 
+		end
 
   // read from the register
   assign instruction_word = iw_reg[read_pointer];  // continuously read from register
