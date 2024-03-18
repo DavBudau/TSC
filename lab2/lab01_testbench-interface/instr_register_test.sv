@@ -16,12 +16,14 @@ module instr_register_test
    output address_t      write_pointer,
    output address_t      read_pointer,
    input  instruction_t  instruction_word
-  );
+  );//dut ul are output care merge in test
 
   timeunit 1ns/1ns;
-  parameter RD_NR=20;
-  parameter WR_NR=20;
+
   int seed = 555;
+
+  parameter readNumber  = 20;
+  parameter writeNumber = 20;
 
   initial begin
     $display("\n\n***********************************************************");
@@ -31,7 +33,7 @@ module instr_register_test
     $display(    "***********************************************************");
 
     $display("\nReseting the instruction register...");
-    write_pointer  = 5'h00;         // initialize write pointer
+    write_pointer  = 5'h00;         // 5 biti in hexazecimal si toate in zero
     read_pointer   = 5'h1F;         // initialize read pointer
     load_en        = 1'b0;          // initialize load control line
     reset_n       <= 1'b0;          // assert reset_n (active low)
@@ -40,8 +42,8 @@ module instr_register_test
 
     $display("\nWriting values to register stack...");
     @(posedge clk) load_en = 1'b1;  // enable writing to register
-    //repeat (3) begin 
-    repeat (WR_NR) begin // 11 03 2024, modificare din 3 in 10 , BD
+    // repeat (3) begin Chiper Stefan 03/11/2024 
+    repeat (readNumber) begin 
       @(posedge clk) randomize_transaction;
       @(negedge clk) print_transaction;
     end
@@ -49,16 +51,16 @@ module instr_register_test
 
     // read back and display same three register locations
     $display("\nReading back the same register locations written...");
-    //for (int i=0; i<=2; i++) begin
-      for (int i=0; i<=RD_NR; i++) begin // 11 03 2024, modificare din 2 in 9 , BD
+    // for (int i=0; i<=2; i++) begin Chiper Stefan 03/11/2024
+    for (int i=0; i<=writeNumber; i++) begin
       // later labs will replace this loop with iterating through a
       // scoreboard to determine which addresses were written and
       // the expected values to be read back
       @(posedge clk) read_pointer = i;
       @(negedge clk) print_results;
-      //check_results
+      checkResult;
     end
-
+    
     @(posedge clk) ;
     $display("\n***********************************************************");
     $display(  "***  THIS IS NOT A SELF-CHECKING TESTBENCH (YET).  YOU  ***");
@@ -76,10 +78,10 @@ module instr_register_test
     // addresses of 0, 1 and 2.  This will be replaceed with randomizeed
     // write_pointer values in a later lab
     //
-    static int temp = 0;
-    operand_a     <= $random(seed)%16;                 // between -15 and 15
-    operand_b     <= $unsigned($random)%16;            // between 0 and 15
-    opcode        <= opcode_t'($unsigned($random)%8);  // between 0 and 7, cast to opcode_t type
+    static int temp = 0; // static se refera ca este alocata o singura data
+    operand_a     <= $random(seed)%16;                 // between -15 and 15 | random este implementat in functie de vendor= producatorul toolui
+    operand_b     <= $unsigned($random)%16;            // between 0 and 15 |unsinged converteste numerele negative in numere pozitive
+    opcode        <= opcode_t'($unsigned($random)%8);  // between 0 and 7, cast to opcode_t type| opcode_t' -inseamna cast =converstete la tipul opcode_t
     write_pointer <= temp++;
   endfunction: randomize_transaction
 
@@ -94,37 +96,40 @@ module instr_register_test
     $display("Read from register location %0d: ", read_pointer);
     $display("  opcode = %0d (%s)", instruction_word.opc, instruction_word.opc.name);
     $display("  operand_a = %0d",   instruction_word.op_a);
-    $display("  operand_b = %0d\n", instruction_word.op_b);
-    $display("  result_t =  %0d\n", instruction_word.rezultat);
+    $display("  operand_b = %0d", instruction_word.op_b);
+    $display(" result_t = %0d\n", instruction_word.rezultat);
   endfunction: print_results
 
-    function void check_results;
-  int expected_result;
+  function void checkResult;
+  int exp_result;
+ //calculam si aici rezultatul si comparam cu cel primit de la DUT
+  //actual instr_word.result, declaram variabila locala exp_result
+  //din instr lusm op a, op b, opcode si mai facem calculul o data
+   //la final un if separat care trebuie sa faca comparatie intre rezultat comparat aici si rezultatul primit
 
+  // Calculul rezultatului așteptat folosind instrucțiunile primite
   case (instruction_word.opc)
-    ZERO : expected_result = 0;
-    ADD: expected_result = instruction_word.op_a + instruction_word.op_b;
-    SUB: expected_result = instruction_word.op_a - instruction_word.op_b;
-    PASSA: expected_result = instruction_word.op_a;
-    PASSB: expected_result = instruction_word.op_b;
-    MULT: expected_result = instruction_word.op_a * instruction_word.op_b;
+    ZERO : exp_result = 0;
+    ADD: exp_result = instruction_word.op_a + instruction_word.op_b;
+    SUB: exp_result = instruction_word.op_a - instruction_word.op_b;
+    PASSA: exp_result = instruction_word.op_a;
+    PASSB: exp_result = instruction_word.op_b;
+    MULT: exp_result = instruction_word.op_a * instruction_word.op_b;
     DIV:
          if(!instruction_word.op_b)
-              expected_result = 0;
+              exp_result = 0;
          else
-              expected_result = instruction_word.op_a / instruction_word.op_b;
-    MOD: expected_result = instruction_word.op_a % instruction_word.op_b;
-    default: $display("operator doesnt exist");
+              exp_result = instruction_word.op_a / instruction_word.op_b;
+    MOD: exp_result = instruction_word.op_a % instruction_word.op_b;
+    default: $display("Non existent operator");
   endcase
 
-  if (expected_result == instruction_word.rezultat) begin
-    $display(" Approved");
+  // Compararea rezultatului așteptat cu rezultatul primit de la DUT
+  if (exp_result == instruction_word.rezultat) begin
+    $display("Result check: Approved");
   end else begin
-    $display("Unapproved");
+    $display("Result check: Unapproved");
   end
- 
-  
-  endfunction: check_results
-
+  endfunction:checkResult
 
 endmodule: instr_register_test
