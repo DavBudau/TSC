@@ -16,18 +16,19 @@ module instr_register_test
    output address_t      write_pointer,
    output address_t      read_pointer,
    input  instruction_t  instruction_word
-  );//dut ul are output care merge in test
+  );
 
   timeunit 1ns/1ns;
-
-  int seed = 555;
-
   parameter readNumber  = 20;
   parameter writeNumber = 20;
 
+  int seed = 555;
+  instruction_t  iw_test_reg [0:31]; 
+
+
   initial begin
     $display("\n\n***********************************************************");
-    $display(    "***  THIS IS NOT A SELF-CHECKING TESTBENCH (YET).  YOU  ***");
+    $display(    "***  THIS IS A SELF-CHECKING TESTBENCH (YET).  YOU  ***");
     $display(    "***  NEED TO VISUALLY VERIFY THAT THE OUTPUT VALUES     ***");
     $display(    "***  MATCH THE INPUT VALUES FOR EACH REGISTER LOCATION  ***");
     $display(    "***********************************************************");
@@ -42,16 +43,17 @@ module instr_register_test
 
     $display("\nWriting values to register stack...");
     @(posedge clk) load_en = 1'b1;  // enable writing to register
-    // repeat (3) begin Chiper Stefan 03/11/2024 
+    // repeat (3) begin Budau David 03/11/2024 
     repeat (readNumber) begin 
       @(posedge clk) randomize_transaction;
       @(negedge clk) print_transaction;
+      saveTestData;
     end
     @(posedge clk) load_en = 1'b0;  // turn-off writing to register
 
     // read back and display same three register locations
     $display("\nReading back the same register locations written...");
-    // for (int i=0; i<=2; i++) begin Chiper Stefan 03/11/2024
+    // for (int i=0; i<=2; i++) begin Budau David 03/11/2024
     for (int i=0; i<=writeNumber; i++) begin
       // later labs will replace this loop with iterating through a
       // scoreboard to determine which addresses were written and
@@ -63,7 +65,7 @@ module instr_register_test
     
     @(posedge clk) ;
     $display("\n***********************************************************");
-    $display(  "***  THIS IS NOT A SELF-CHECKING TESTBENCH (YET).  YOU  ***");
+    $display(  "***  THIS IS A SELF-CHECKING TESTBENCH (YET).  YOU  ***");
     $display(  "***  NEED TO VISUALLY VERIFY THAT THE OUTPUT VALUES     ***");
     $display(  "***  MATCH THE INPUT VALUES FOR EACH REGISTER LOCATION  ***");
     $display(  "***********************************************************\n");
@@ -102,26 +104,36 @@ module instr_register_test
 
   function void checkResult;
   int exp_result;
- //calculam si aici rezultatul si comparam cu cel primit de la DUT
-  //actual instr_word.result, declaram variabila locala exp_result
-  //din instr lusm op a, op b, opcode si mai facem calculul o data
-   //la final un if separat care trebuie sa faca comparatie intre rezultat comparat aici si rezultatul primit
+  if( iw_test_reg[read_pointer].opc== instruction_word.opc)
+    $display("Opcode is correct from register location %0d: ", read_pointer);
+  else
+    $display("Opcode is incorrect from register location %0d: ", read_pointer);
 
-  // Calculul rezultatului așteptat folosind instrucțiunile primite
-  case (instruction_word.opc)
+  if( iw_test_reg[read_pointer].op_a== instruction_word.op_a)
+    $display("Operant_a is correct from register location %0d: ", read_pointer);
+  else
+    $display("Operant_a is incorrect from register location %0d: ", read_pointer);
+
+  if( iw_test_reg[read_pointer].op_b== instruction_word.op_b)
+      $display("Operant_b is correct from register location %0d: ", read_pointer);
+    else
+      $display("Operant_b is incorrect from register location %0d: ", read_pointer);
+
+  case (iw_test_reg[read_pointer].opc)
     ZERO : exp_result = 0;
-    ADD: exp_result = instruction_word.op_a + instruction_word.op_b;
-    SUB: exp_result = instruction_word.op_a - instruction_word.op_b;
-    PASSA: exp_result = instruction_word.op_a;
-    PASSB: exp_result = instruction_word.op_b;
-    MULT: exp_result = instruction_word.op_a * instruction_word.op_b;
+    ADD: exp_result = iw_test_reg[read_pointer].op_a + iw_test_reg[read_pointer].op_b;
+    SUB: exp_result = iw_test_reg[read_pointer].op_a - iw_test_reg[read_pointer].op_b;
+    PASSA: exp_result = iw_test_reg[read_pointer].op_a;
+    PASSB: exp_result = iw_test_reg[read_pointer].op_b;
+    MULT: exp_result = iw_test_reg[read_pointer].op_a * iw_test_reg[read_pointer].op_b;
     DIV:
-         if(!instruction_word.op_b)
+         if(!iw_test_reg[read_pointer].op_b)
               exp_result = 0;
          else
-              exp_result = instruction_word.op_a / instruction_word.op_b;
-    MOD: exp_result = instruction_word.op_a % instruction_word.op_b;
+              exp_result = iw_test_reg[read_pointer].op_a / iw_test_reg[read_pointer].op_b;
+    MOD: exp_result = iw_test_reg[read_pointer].op_a % iw_test_reg[read_pointer].op_b;
     default: $display("Non existent operator");
+
   endcase
 
   // Compararea rezultatului așteptat cu rezultatul primit de la DUT
@@ -131,5 +143,15 @@ module instr_register_test
     $display("Result check: Unapproved");
   end
   endfunction:checkResult
+
+
+  function void saveTestData;
+
+  iw_test_reg[write_pointer] = '{opcode, operand_a,operand_b,0};
+    $display("Read from register location %0d: ", write_pointer);
+    $display("  opcode = %0d (%s)", iw_test_reg[write_pointer].opc, iw_test_reg[write_pointer].opc.name);
+    $display("  operand_a = %0d",   iw_test_reg[write_pointer].op_a);
+    $display("  operand_b = %0d", iw_test_reg[write_pointer].op_b);
+  endfunction:saveTestData
 
 endmodule: instr_register_test
