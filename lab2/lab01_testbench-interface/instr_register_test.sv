@@ -19,11 +19,12 @@ module instr_register_test
   );
 
   timeunit 1ns/1ns;
-  parameter readNumber  = 20;
-  parameter writeNumber = 20;
-
+  parameter readNumber  = 50;
+  parameter writeNumber = 50;
+  int write_order = 0;
+  int read_order = 0;
   int seed = 555;
-  instruction_t  iw_test_reg [0:31]; 
+  instruction_t iw_test_reg [0:31]; 
 
 
   initial begin
@@ -62,7 +63,9 @@ module instr_register_test
       @(negedge clk) print_results;
       checkResult;
     end
-    
+
+
+
     @(posedge clk) ;
     $display("\n***********************************************************");
     $display(  "***  THIS IS A SELF-CHECKING TESTBENCH (YET).  YOU  ***");
@@ -71,6 +74,10 @@ module instr_register_test
     $display(  "***********************************************************\n");
     $finish;
   end
+
+function void finalReport;
+
+endfunction
 
   function void randomize_transaction;
     // A later lab will replace this function with SystemVerilog
@@ -81,10 +88,17 @@ module instr_register_test
     // write_pointer values in a later lab
     //
     static int temp = 0; // static se refera ca este alocata o singura data
+    static int temp_decrement = 31;
+    
     operand_a     <= $random(seed)%16;                 // between -15 and 15 | random este implementat in functie de vendor= producatorul toolui
     operand_b     <= $unsigned($random)%16;            // between 0 and 15 |unsinged converteste numerele negative in numere pozitive
     opcode        <= opcode_t'($unsigned($random)%8);  // between 0 and 7, cast to opcode_t type| opcode_t' -inseamna cast =converstete la tipul opcode_t
-    write_pointer <= temp++;
+    case(write_order)
+    0: write_pointer = temp++;
+    1: write_pointer = temp_decrement--;
+    2: write_pointer = ($unsigned($random)%32);
+    endcase
+    
   endfunction: randomize_transaction
 
   function void print_transaction;
@@ -136,6 +150,8 @@ module instr_register_test
 
   endcase
 
+  
+
   // Compararea rezultatului așteptat cu rezultatul primit de la DUT
   if (exp_result == instruction_word.rezultat) begin
     $display("Result check: Approved");
@@ -155,3 +171,4 @@ module instr_register_test
   endfunction:saveTestData
 
 endmodule: instr_register_test
+// de facut write order, read order, facut finalReport
