@@ -11,15 +11,15 @@ Z0 dD:/TSC-lab2/lab2
 vinstr_register
 Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
 Z2 DXx4 work 18 instr_register_pkg 0 22 c@bP5GMKGXmaG4Tz1S:n;3
-!s110 1710142487
+!s110 1711351586
 !i10b 1
-!s100 c6Rdde`jLCamRHc^>oTc63
-I[f7NGKO3oLROeFe_nonW@3
+!s100 [jV1P8Lclb[J7ZjFTnC^@0
+I:bK@GAz[_f>Mb@Acc<[=03
 Z3 VDg1SIo80bB@j0V0VzS_@n1
 !s105 instr_register_sv_unit
 S1
 Z4 dD:/TSC-lab2/TSC/lab2
-w1710134731
+w1710700693
 8D:/TSC-lab2/TSC/lab2/lab_dut/instr_register.sv
 FD:/TSC-lab2/TSC/lab2/lab_dut/instr_register.sv
 L0 9
@@ -27,7 +27,7 @@ Z5 OV;L;10.5b;63
 r1
 !s85 0
 31
-!s108 1710142487.000000
+!s108 1711351586.000000
 !s107 D:/TSC-lab2/TSC/lab2/lab_dut/instr_register.sv|
 !s90 -reportprogress|300|-work|work|D:/TSC-lab2/TSC/lab2/lab_dut/instr_register.sv|
 !i113 1
@@ -35,7 +35,7 @@ Z6 o-work work
 Z7 tCvgOpt 0
 Xinstr_register_pkg
 R1
-!s110 1710142485
+!s110 1711351585
 !i10b 1
 !s100 XazW>GXO6=7^h[DnUca;>2
 Ic@bP5GMKGXmaG4Tz1S:n;3
@@ -50,7 +50,7 @@ R5
 r1
 !s85 0
 31
-!s108 1710142485.000000
+!s108 1711351585.000000
 !s107 D:/TSC-lab2/TSC/lab2/lab_dut/instr_register_pkg.sv|
 !s90 -reportprogress|300|-work|work|D:/TSC-lab2/TSC/lab2/lab_dut/instr_register_pkg.sv|
 !i113 1
@@ -59,15 +59,15 @@ R7
 vinstr_register_test
 R1
 R2
-!s110 1710142499
+!s110 1711350870
 !i10b 1
-!s100 0g]UVRF:AK:_fK8DKkdG01
-I=28m6am6b20VUEin;iJWL3
+!s100 ekGNk@S6@hE8hVUUK;Q190
+I4g1`X_`8VN[5TO;dc@95K1
 R3
 !s105 instr_register_test_sv_unit
 S1
 R4
-w1710142428
+w1711350694
 8D:/TSC-lab2/TSC/lab2/lab01_testbench-interface/instr_register_test.sv
 FD:/TSC-lab2/TSC/lab2/lab01_testbench-interface/instr_register_test.sv
 L0 8
@@ -75,7 +75,7 @@ R5
 r1
 !s85 0
 31
-!s108 1710142499.000000
+!s108 1711350870.000000
 !s107 D:/TSC-lab2/TSC/lab2/lab01_testbench-interface/instr_register_test.sv|
 !s90 -reportprogress|300|-work|work|D:/TSC-lab2/TSC/lab2/lab01_testbench-interface/instr_register_test.sv|
 !i113 1
@@ -109,7 +109,7 @@ R7
 vtop
 R1
 R2
-!s110 1710142501
+!s110 1711350871
 !i10b 1
 !s100 Pg=M]M2k<1Dk;?TFRVBCm1
 I1dJ1mV=VHjCoACN6?PdQ^0
@@ -125,7 +125,7 @@ R5
 r1
 !s85 0
 31
-!s108 1710142500.000000
+!s108 1711350871.000000
 !s107 D:/TSC-lab2/TSC/lab2/lab01_testbench-interface/top.sv|
 !s90 -reportprogress|300|-work|work|D:/TSC-lab2/TSC/lab2/lab01_testbench-interface/top.sv|
 !i113 1

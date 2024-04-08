@@ -1,0 +1,112 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dD:/TSC-lab2/TSC/lab2/sim
+vinstr_register
+Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z2 DXx4 work 18 instr_register_pkg 0 22 Yb`;NRNo0o9No7=NKb`9V0
+Z3 !s110 1712557418
+!i10b 1
+!s100 3<6PZOfaDLdl199nVCE0F0
+ISclh>b^2Y`e_PRWBSYIeZ3
+Z4 VDg1SIo80bB@j0V0VzS_@n1
+!s105 instr_register_sv_unit
+S1
+R0
+w1710700693
+8../../lab2/lab_dut/instr_register.sv
+F../../lab2/lab_dut/instr_register.sv
+L0 9
+Z5 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z6 !s108 1712557418.000000
+Z7 !s107 ../lab01_testbench-interface/top.sv|../../lab2/lab01_testbench-interface/instr_register_test.sv|../../lab2/lab_dut/instr_register.sv|../../lab2/lab_dut/instr_register_pkg.sv|
+Z8 !s90 -sv|-timescale|1ps/1ps|-work|work|-f|sources.txt|
+!i113 1
+Z9 o-sv -timescale 1ps/1ps -work work
+Z10 !s92 -sv -timescale 1ps/1ps -work work +incdir+../../lab_dut +incdir+../../lab_dut +incdir+../lab01_testbench +incdir+../lab01_testbench
+Z11 tCvgOpt 0
+Xinstr_register_pkg
+R1
+R3
+!i10b 1
+!s100 `TBz@:Cz6jod2;z^a:TVR1
+IYb`;NRNo0o9No7=NKb`9V0
+VYb`;NRNo0o9No7=NKb`9V0
+S1
+R0
+w1710090156
+8../../lab2/lab_dut/instr_register_pkg.sv
+F../../lab2/lab_dut/instr_register_pkg.sv
+L0 5
+R5
+r1
+!s85 0
+31
+R6
+R7
+R8
+!i113 1
+R9
+R10
+R11
+vinstr_register_test
+R1
+R2
+R3
+!i10b 1
+!s100 ZYaB_4Ug1L:ILXZOkzJD82
+IcU3ZdH775nn7O>O9;O5>J3
+R4
+!s105 instr_register_test_sv_unit
+S1
+R0
+w1712554341
+8../../lab2/lab01_testbench-interface/instr_register_test.sv
+F../../lab2/lab01_testbench-interface/instr_register_test.sv
+L0 8
+R5
+r1
+!s85 0
+31
+R6
+R7
+R8
+!i113 1
+R9
+R10
+R11
+vtop
+R1
+R2
+R3
+!i10b 1
+!s100 PK_W450MV<B?5IPK6MRkE3
+I<EhGhW^?`VK0>0SC1d[ZV0
+R4
+!s105 top_sv_unit
+S1
+R0
+w1709533201
+8../lab01_testbench-interface/top.sv
+F../lab01_testbench-interface/top.sv
+L0 5
+R5
+r1
+!s85 0
+31
+R6
+R7
+R8
+!i113 1
+R9
+R10
+R11
